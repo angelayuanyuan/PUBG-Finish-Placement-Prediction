@@ -6,8 +6,13 @@ library(dplyr)
 ############## Read Data ##################
 ###########################################
 
-train.raw <- fread("../all/train.csv")
-test.raw <- fread("../all/test.csv")
+# train.raw <- fread("../all/train.csv")
+# test.raw <- fread("../all/test.csv")
+
+# train <- saveRDS(train.raw,file = "train.rds")
+# test <- saveRDS(test.raw,file = "test.rds")
+train.raw <- readRDS("train.rds") 
+test.raw <- readRDS("test.rds")
 
 # compare train and test sets
 setdiff(names(train.raw), names(test.raw)) 
@@ -56,4 +61,59 @@ quantile(te.players$n) # yes, then we'll keep these data for now
 ggplot(train.raw)+
   geom_histogram(aes(winPlacePerc),fill="#9999CC") 
 
+# independant variables
+# walk distance
+ggplot(train.raw)+
+  geom_histogram(aes(walkDistance),fill="#66CC99")
+quantile(train.raw$walkDistance) # outliers
 
+# ride distance
+ggplot(train.raw)+
+  geom_histogram(aes(rideDistance),fill="#66CC99")
+quantile(train.raw$rideDistance) # outliers
+
+ggplot(train.raw[train.raw$rideDistance<5000,])+
+  geom_histogram(aes(rideDistance),fill="#66CC99")
+
+sum(train.raw$rideDistance==0) # 3439985 records have zero ride distance (never used a car in the match)
+
+# swim distance
+ggplot(train.raw)+
+  geom_histogram(aes(swimDistance),fill="#66CC99")
+quantile(train.raw$swimDistance)
+
+sum(train.raw$swimDistance==0) # 4076544 records have zero swim distance (am I the only one who like to swim??)
+
+# weapons aquired
+ggplot(train.raw)+
+  geom_histogram(aes(weaponsAcquired),fill="#CC6666")
+quantile(train.raw$weaponsAcquired)
+
+ggplot(train.raw[train.raw$weaponsAcquired<20,])+
+  geom_histogram(aes(weaponsAcquired),fill="#CC6666")
+
+median(train.raw$weaponsAcquired) # 3 weapons
+
+# knocked downs
+ggplot(train.raw)+
+  geom_histogram(aes(DBNOs),fill="#CC6666")
+quantile(train.raw$DBNOs,0.99999) # more than 30 knock downs is really unlikely to happen
+
+ggplot(train.raw[train.raw$DBNOs<20,])+
+  geom_histogram(aes(DBNOs),fill="#CC6666") # most players have zero knock downs
+
+# kills
+ggplot(train.raw)+
+  geom_histogram(aes(kills),fill="#CC6666")
+quantile(train.raw$kills,0.99999) # more than 30 kills is really unlikely to happen too
+
+ggplot(train.raw[train.raw$kills<20,])+
+  geom_histogram(aes(kills),fill="#CC6666") # most players have zero kills
+
+# longest kills
+ggplot(train.raw)+
+  geom_histogram(aes(longestKill),fill="#CC6666")
+quantile(train.raw$longestKill,0.99999)
+
+ggplot(train.raw[train.raw$longestKill<300,])+
+  geom_histogram(aes(longestKill),fill="#CC6666")
