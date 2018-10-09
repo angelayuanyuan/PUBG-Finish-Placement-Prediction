@@ -117,3 +117,32 @@ quantile(train.raw$longestKill,0.99999)
 
 ggplot(train.raw[train.raw$longestKill<300,])+
   geom_histogram(aes(longestKill),fill="#CC6666")
+
+# head shots kill
+ggplot(train.raw)+
+  geom_histogram(aes(headshotKills),fill="#CC6666")
+quantile(train.raw$headshotKills,0.99999)
+
+ggplot(train.raw[train.raw$headshotKills<10,])+
+  geom_histogram(aes(headshotKills),fill="#CC6666")
+###########################################
+############## Sample EDA #################
+###########################################
+set.seed(1234)
+tr.sample <- sample_n(train.raw, 50000)
+
+# kills versus rank
+ggplot(tr.sample)+
+  geom_jitter(aes(winPlacePerc,kills,alpha=0.2))
+  
+# assists versus rank
+ggplot(tr.sample)+
+  geom_jitter(aes(winPlacePerc,assists,alpha=0.2))
+
+# head shots versus rank
+ggplot(tr.sample)+
+  geom_jitter(aes(winPlacePerc,headshotKills,alpha=0.2))
+
+# weapons versus rank
+ggplot(tr.sample)+
+  geom_jitter(aes(winPlacePerc,weaponsAcquired,alpha=0.2))
